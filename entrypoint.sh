@@ -22,7 +22,6 @@ file_env() {
 file_env 'UBUNTU_USER'
 file_env 'UBUNTU_PW'
 file_env 'NODE_VERSION'
-file_env 'REDIS_DOCKER_IP'
 
 if [ -z "$UBUNTU_USER" ]; then
   UBUNTU_USER=ubuntu
@@ -36,10 +35,6 @@ if [ -z "$NODE_VERSION" ]; then
   NODE_VERSION=node
 fi
 
-if [ -z "$REDIS_DOCKER_IP" ]; then
-  REDIS_DOCKER_IP=localhost
-fi
-
 
 useradd -u 1000 -G users,sudo,root -d /home/$UBUNTU_USER --shell /bin/bash -m $UBUNTU_USER && \
 echo "$UBUNTU_USER:$UBUNTU_PW" | chpasswd
@@ -51,7 +46,6 @@ cd /home/$UBUNTU_USER
 curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/$NVM_VER/install.sh | bash
 source .nvm/nvm.sh
 nvm install $NODE_VERSION
-echo "export REDIS_DOCKER_IP=$REDIS_DOCKER_IP" >> .bashrc
 EOF
 
 exec "$@"
