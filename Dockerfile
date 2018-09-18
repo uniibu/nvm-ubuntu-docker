@@ -20,7 +20,7 @@ RUN apt-get update \
     && apt-get install -y curl \
     && apt-get -y autoclean
     NVM_LATEST=$(curl --silent "https://api.github.com/repos/creationix/nvm/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")') \
-    && curl -o- https://raw.githubusercontent.com/creationix/nvm/$NVM_LATEST/install.sh | bash
+    && curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/$NVM_LATEST/install.sh | bash
 
     
 ENV LANG en_US.UTF-8
