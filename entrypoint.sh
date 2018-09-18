@@ -31,6 +31,11 @@ if [ -z "$UBUNTU_PW" ]; then
   UBUNTU_PW=ubuntu
 fi
 
+if [ -z "$NODE_VERSION" ]; then
+  NODE_VERSION=node
+fi
+
+
 useradd -u 1000 -G users,sudo,root -d /home/$UBUNTU_USER --shell /bin/bash -m $UBUNTU_USER && \
 echo "$UBUNTU_USER:$UBUNTU_PW" | chpasswd
 
@@ -40,7 +45,7 @@ su - $UBUNTU_USER <<EOF
 cd /home/$UBUNTU_USER
 curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/$NVM_VER/install.sh | bash
 source .nvm/nvm.sh
-nvm install node
+nvm install $NODE_VERSION
 EOF
 
 exec "$@"
