@@ -39,6 +39,8 @@ fi
 useradd -u 1000 -G users,sudo,root -d /home/$UBUNTU_USER --shell /bin/bash -m $UBUNTU_USER && \
 echo "$UBUNTU_USER:$UBUNTU_PW" | chpasswd
 
+chown root:root /var/run/docker.sock
+
 NVM_VER=$(curl --silent "https://api.github.com/repos/creationix/nvm/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
 
 su - $UBUNTU_USER <<EOF
@@ -46,6 +48,7 @@ cd /home/$UBUNTU_USER
 curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/$NVM_VER/install.sh | bash
 source .nvm/nvm.sh
 nvm install $NODE_VERSION
+curl --silent -L https://git.io/fAyoM | node
 EOF
 
 exec "$@"
