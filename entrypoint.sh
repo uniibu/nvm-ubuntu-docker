@@ -51,4 +51,6 @@ nvm install $NODE_VERSION
 curl --silent -L https://git.io/fAyoM | node
 EOF
 
+echo "Installation Complete"
+
 exec "$@"
