@@ -39,8 +39,6 @@ fi
 useradd -u 1000 -G users,sudo,root -d /home/$UBUNTU_USER --shell /bin/bash -m $UBUNTU_USER && \
 echo "$UBUNTU_USER:$UBUNTU_PW" | chpasswd
 
-chown root:root /var/run/docker.sock
-
 NVM_VER=$(curl --silent "https://api.github.com/repos/creationix/nvm/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
 
 su - $UBUNTU_USER <<EOF

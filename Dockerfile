@@ -15,14 +15,14 @@ RUN apt-get update && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     rm -rf /var/lib/apt/lists/* && \
     localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
- 
+
 ENV LANG en_US.UTF-8
- 
-COPY ["entrypoint.sh","/usr/local/bin/entrypoint.sh"]
 
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY ["install.sh","/usr/local/bin/install.sh"]
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+RUN chmod +x /usr/local/bin/install.sh
+
+RUN /usr/local/bin/install.sh
 
 EXPOSE 22 8080 8081 8082 8083 8084 8085 8086 8087 8088 8089
 
