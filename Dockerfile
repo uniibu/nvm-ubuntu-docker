@@ -27,7 +27,9 @@ USER ubuntu
 RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 RUN /bin/bash -c "source ~/.nvm/nvm.sh; nvm install node"
 
-ENTRYPOINT [ "curl", "--silent", "-L", "https://git.io/fAyoM", "|", "node" ] 
+COPY entrypoint.sh /usr/local/bin/
+
+ENTRYPOINT [ "entrypoint.sh" ] 
 
 EXPOSE 22 8080 8081 8082 8083 8084 8085 8086 8087 8088 8089
 
