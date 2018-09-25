@@ -22,8 +22,7 @@ RUN apt-get update && \
 ENV LANG en_US.UTF-8
 
 RUN useradd -u 1000 -G users,sudo,root -d /home/ubuntu --shell /bin/bash -m ubuntu && \
-    echo "ubuntu:ubuntu" | chpasswd && \
-    passwd -e ubuntu
+    echo "ubuntu:ubuntu" | chpasswd
 
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
