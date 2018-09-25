@@ -32,6 +32,7 @@ RUN chmod +x /usr/local/bin/check.sh
 USER ubuntu
 
 RUN echo "/usr/local/bin/check.sh" >> ~/.bashrc
+RUN echo "source /.docker_ports" >> ~/.bashrc
 
 RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 RUN source ~/.nvm/nvm.sh && nvm install node
