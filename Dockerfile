@@ -1,5 +1,7 @@
 FROM ubuntu:16.04
 
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
 RUN apt-get update && \
     apt-get -y install \
     locales \
@@ -14,7 +16,8 @@ RUN apt-get update && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     rm -rf /var/lib/apt/lists/* && \
-    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
+    apt-get -y autoclean
 
 ENV LANG en_US.UTF-8
 
@@ -28,7 +31,9 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 USER ubuntu
 
 RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-RUN /bin/bash -c "source ~/.nvm/nvm.sh; nvm install node"
+RUN source ~/.nvm/nvm.sh && nvm install node
+
+USER root
 
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ] 
 
