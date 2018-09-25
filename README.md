@@ -18,8 +18,11 @@ This image will also add the container's published ports to the container's envi
 
 To run:
 ```
+docker volume create nvm_data
 docker run --name=nvm-docker -d \
    -p 22 \
    -p 8080-8089 \
+   -v /var/run/docker.sock:/var/run/docker.sock \
+   -v nvm_data:/home/ubuntu \
    unibtc/nvm-ubuntu-docker:latest
 ```
