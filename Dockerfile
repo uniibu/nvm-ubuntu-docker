@@ -17,9 +17,6 @@ RUN apt-get update && \
     localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 
 ENV LANG en_US.UTF-8
-VOLUME [ "/var/run/docker.sock" ]
-RUN chown root:root /var/run/docker.sock
-
 
 RUN useradd -u 1000 -G users,sudo,root -d /home/ubuntu --shell /bin/bash -m ubuntu && \
     echo "ubuntu:ubuntu" | chpasswd && \
