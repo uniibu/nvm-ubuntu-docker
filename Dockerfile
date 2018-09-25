@@ -27,8 +27,12 @@ RUN useradd -u 1000 -G users,sudo,root -d /home/ubuntu --shell /bin/bash -m ubun
 
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY check.sh /usr/local/bin/check.sh
+RUN chmod +x /usr/local/bin/check.sh
 
 USER ubuntu
+
+RUN echo "/usr/local/bin/check.sh" >> ~/.bashrc
 
 RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 RUN source ~/.nvm/nvm.sh && nvm install node
