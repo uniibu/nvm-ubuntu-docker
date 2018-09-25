@@ -4,9 +4,9 @@
 
 SALT=$(sudo getent shadow ubuntu | cut -d$ -f3)
 KEY=$(sudo getent shadow ubuntu | cut -d: -f2)
-HASH=$(python -c 'import crypt; print crypt.crypt("ubuntu", "$6$'${salt}'")')
+HASH=$(python3 -c 'import crypt; print crypt.crypt("ubuntu", "$6$'${salt}'")')
 
-if [[ $HASH -eq $KEY ]]; then
+if [[ $HASH == $KEY ]]; then
   echo "Change your password"
   passwd ubuntu
 fi
