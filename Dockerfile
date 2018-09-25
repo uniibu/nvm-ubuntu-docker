@@ -18,11 +18,22 @@ RUN apt-get update && \
 
 ENV LANG en_US.UTF-8
 
-COPY ["install.sh","/usr/local/bin/install.sh"]
+RUN useradd -u 1000 -G users,sudo,root -d /home/ubuntu --shell /bin/bash -m ubuntu && \
+    echo "ubuntu:ubuntu" | chpasswd && \
+    passwd -e ubuntu
 
-RUN chmod +x /usr/local/bin/install.sh
+USER ubuntu
 
-RUN /usr/local/bin/install.sh
+RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+RUN /bin/bash -c "source ~/.nvm/nvm.sh; nvm install node"
+
+USER root
+
+COPY ["entrypoint.sh","/usr/local/bin/entrypoint.sh"]
+
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ] 
 
 EXPOSE 22 8080 8081 8082 8083 8084 8085 8086 8087 8088 8089
 
