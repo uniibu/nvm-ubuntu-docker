@@ -29,7 +29,7 @@ RUN /bin/bash -c "source ~/.nvm/nvm.sh; nvm install node"
 
 COPY entrypoint.sh /usr/local/bin/
 
-ENTRYPOINT [ "entrypoint.sh" ] 
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ] 
 
 EXPOSE 22 8080 8081 8082 8083 8084 8085 8086 8087 8088 8089
 
