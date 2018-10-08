@@ -1,8 +1,14 @@
 FROM ubuntu:16.04
 
 ENV HOME /home/ubuntu
+ENV USER_ID 1000
+ENV GROUP_ID 1000
 
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+RUN groupadd -g ${GROUP_ID} ubuntu \
+    && useradd -u ${USER_ID} -g ubuntu -s /bin/bash -m -d /home/ubuntu ubuntu \
+    && echo "ubuntu:ubuntu" | chpasswd && groupadd docker && usermod -aG docker ubuntu
 
 RUN apt-get update && \
     apt-get -y install \
@@ -24,10 +30,8 @@ RUN apt-get update && \
 
 ENV LANG en_US.UTF-8
 
-RUN useradd -u 1000 -G users,sudo,root -d /home/ubuntu --shell /bin/bash -m ubuntu && \
-    echo "ubuntu:ubuntu" | chpasswd && groupadd docker && usermod -aG docker ubuntu
-
-
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
 COPY check.sh /usr/local/bin/check.sh
 RUN chmod +x /usr/local/bin/check.sh
 ADD ./bin /usr/local/bin
@@ -36,6 +40,7 @@ RUN chmod +x /usr/local/bin/nvm_oneshot
 RUN echo "/usr/local/bin/check.sh" >> ~/.bashrc
 RUN echo "source /.docker_ports" >> ~/.bashrc
 
+USER "ubuntu"
 RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 RUN source ~/.nvm/nvm.sh && nvm install node
 
@@ -45,10 +50,6 @@ EXPOSE 22 8080 8081 8082 8083 8084 8085 8086 8087 8088 8089
 
 WORKDIR /home/ubuntu
 
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ] 
-
-
 
 CMD ["nvm_oneshot"]
