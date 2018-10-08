@@ -1,5 +1,7 @@
 FROM ubuntu:16.04
 
+ENV HOME /home/ubuntu
+
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 RUN apt-get update && \
@@ -11,6 +13,7 @@ RUN apt-get update && \
     git \
     build-essential \
     nano \
+    gosu \
     bash-completion && \
     mkdir /var/run/sshd && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
@@ -24,12 +27,11 @@ ENV LANG en_US.UTF-8
 RUN useradd -u 1000 -G users,sudo,root -d /home/ubuntu --shell /bin/bash -m ubuntu && \
     echo "ubuntu:ubuntu" | chpasswd && groupadd docker && usermod -aG docker ubuntu
 
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
+
 COPY check.sh /usr/local/bin/check.sh
 RUN chmod +x /usr/local/bin/check.sh
-
-USER ubuntu
+ADD ./bin /usr/local/bin
+RUN chmod +x /usr/local/bin/nvm_oneshot
 
 RUN echo "/usr/local/bin/check.sh" >> ~/.bashrc
 RUN echo "source /.docker_ports" >> ~/.bashrc
@@ -37,10 +39,16 @@ RUN echo "source /.docker_ports" >> ~/.bashrc
 RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 RUN source ~/.nvm/nvm.sh && nvm install node
 
-USER root
-
-ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ] 
+VOLUME ["/home/ubuntu"]
 
 EXPOSE 22 8080 8081 8082 8083 8084 8085 8086 8087 8088 8089
 
-CMD    ["/usr/sbin/sshd", "-D"]
+WORKDIR /home/ubuntu
+
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ] 
+
+
+
+CMD ["nvm_oneshot"]
